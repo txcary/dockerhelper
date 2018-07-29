@@ -1,3 +1,4 @@
+rm -f ../ip.txt
 if [  $# -lt 1 ]; then 
 echo -e "\nUsage:\n$0 [virtual machine] \n" 
 exit 1

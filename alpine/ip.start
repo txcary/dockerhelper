@@ -1,0 +1,2 @@
+ipaddr=`ifconfig eth0 |grep "inet addr" |cut -f 2 -d ":" |cut -f 1 -d " "`
+echo "$ipaddr" > /workspace/ip.txt
