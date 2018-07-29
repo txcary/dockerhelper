@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-# Translate a MAC address fetched from VirtualBox into a IP address
-#
 
 if [  $# -lt 1 ]; then 
 echo -e "\nUsage:\n$0 [virtual machine] \n" 

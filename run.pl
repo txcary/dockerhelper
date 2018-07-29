@@ -2,7 +2,13 @@
 use 5.010;
 my $image = inputFromList("Select Image", getImageList());
 my $cmd = inputFromCommand("Input Command");
-system "docker run -it --rm -v /workspace:/workspace $image $cmd";
+my ($imageBase) = split ":", $image;
+my $options = "";
+if(-e "options/$imageBase.conf") {
+  $options =  `cat options/$imageBase.conf`;
+}
+chomp($options);
+system "docker run -it --rm $options $image $cmd";
 
 sub getImageList {
 	my @images = `docker images`;
