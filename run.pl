@@ -8,7 +8,13 @@ if(-e "options/$imageBase.conf") {
   $options =  `cat options/$imageBase.conf`;
 }
 chomp($options);
-system "docker run -it --rm $options $image $cmd";
+run("docker run -it --rm $options $image $cmd");
+
+sub run {
+	my $cmd = shift;
+	say $cmd;
+	system $cmd;
+}
 
 sub getImageList {
 	my @images = `docker images`;
