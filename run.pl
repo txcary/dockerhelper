@@ -1,8 +1,15 @@
 #!/usr/bin/perl
 use 5.010;
 my $image = inputFromList("Select Image", getImageList());
-my $cmd = inputFromCommand("Input Command");
 my ($imageBase) = split ":", $image;
+
+my $cmd = inputFromList("Select Command", getCommandList($imageBase));
+if($cmd eq "User input") {
+  $cmd = inputFromCommand("Input Command");
+}elsif($cmd eq "NA") {
+  $cmd = "";
+}
+
 my $options = "";
 if(-e "options/$imageBase.conf") {
   $options =  `cat options/$imageBase.conf`;
@@ -14,6 +21,20 @@ sub run {
 	my $cmd = shift;
 	say $cmd;
 	system $cmd;
+}
+
+sub getCommandList {
+  my $imageBase = shift;
+  my @list = ();
+  push @list, "NA";
+  push @list, "User input";
+  my @files = `ls -1 commands/$imageBase/`;
+  foreach my $file (@files) {
+    chomp($file);
+    push @list, "/workspace/dockerhelper/commands/$imageBase/$file";
+  }
+  return @list;
+
 }
 
 sub getImageList {
