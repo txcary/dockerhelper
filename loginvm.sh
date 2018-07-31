@@ -5,5 +5,5 @@ do
 	echo "waiting ip..."
 	sleep 1
 done
-
-ssh root@`cat ../ip.txt`
+ip=`cat ../ip.txt`
+ssh -x root@$ip -t 'cd /workspace/dockerhelper; /bin/sh'
