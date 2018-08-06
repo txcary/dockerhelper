@@ -1,5 +1,5 @@
 #!/bin/sh
-project=dockerhelper
+project=dockerfiles
 git config --global user.name "Tan Xiang"
 git config --global user.email tx-cary@163.com
 git -C $project pull

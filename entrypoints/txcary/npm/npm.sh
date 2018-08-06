@@ -1,5 +1,5 @@
 #!/bin/sh
-npm config set registry http://registry.cnpmjs.org
+npm config set registry https://registry.npm.taobao.org
 
 if [  $# -lt 1 ]; then 
   exec "/bin/sh"
