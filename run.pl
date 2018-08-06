@@ -3,19 +3,29 @@ use 5.010;
 my $image = inputFromList("Select Image", getImageList());
 my ($imageBase) = split ":", $image;
 
-my $cmd = inputFromList("Select Command", getCommandList($imageBase));
-if($cmd eq "User input") {
-  $cmd = inputFromCommand("Input Command");
-}elsif($cmd eq "NA") {
-  $cmd = "";
+my $options = inputFromList("Select Option", getOptionList($imageBase));
+if(-e "$options") {
+	$options = `cat $options`;	
+	chomp($options);
+} else {
+	$options = "";
 }
 
-my $options = "";
-if(-e "options/$imageBase.conf") {
-  $options =  `cat options/$imageBase.conf`;
+my $entry = inputFromList("Select Entrypoint", getEntryList($imageBase));
+if(-e "$entry") {
+	$entry = "--entrypoint $entry";
+} else {
+	$entry = "";
 }
-chomp($options);
-run("docker run -it --rm $options $image $cmd");
+
+my $cmd = inputFromList("Select Command", getCommandList($imageBase));
+if(-e "$cmd") {
+	chomp($cmd);
+} else {
+	$cmd = "";
+}
+
+run("docker run $options $entry $image $cmd");
 
 sub run {
 	my $cmd = shift;
@@ -23,18 +33,41 @@ sub run {
 	system $cmd;
 }
 
-sub getCommandList {
-  my $imageBase = shift;
+sub getFileList {
+  my $path = shift;
+  unless(-e $path) {
+  	return ();
+  }
   my @list = ();
-  push @list, "NA";
-  push @list, "User input";
-  my @files = `ls -1 commands/$imageBase/`;
+  my @files = `ls -l $path/ | grep ^-`;
   foreach my $file (@files) {
     chomp($file);
-    push @list, "/workspace/dockerhelper/commands/$imageBase/$file";
+    my @tempList = split ' ',$file;
+    $file = $tempList[-1];
+    push @list, "$path/$file";
   }
   return @list;
+}
 
+sub getEntryList {
+  my $imageBase = shift;
+  my @list = getFileList("/workspace/dockerhelper/entrypoints");
+  @list = (@list, getFileList("/workspace/dockerhelper/entrypoints/$imageBase"));
+  return @list;
+}
+
+sub getCommandList {
+  my $imageBase = shift;
+  my @list = getFileList("/workspace/dockerhelper/commands");
+  @list = (@list, getFileList("/workspace/dockerhelper/commands/$imageBase"));
+  return @list;
+}
+
+sub getOptionList {
+	my $imageBase = shift;
+ 	my @list = getFileList("/workspace/dockerhelper/options");
+  	@list = (@list, getFileList("/workspace/dockerhelper/options/$imageBase"));
+  	return @list;
 }
 
 sub getImageList {
@@ -61,10 +94,18 @@ sub inputFromList {
 	my $title = shift;
 	my @list = @_;
 
+	if(@list==0) {
+		return "";
+	}
+
 	for(my $i=0; $i<@list; $i++) {
 		say "$i.$list[$i]";
 	}
 	print "$title> ";
 	my $ret = <>;
-	return $list[$ret];
+	chomp($ret);
+	if($ret =~ /^\d+$/) {
+		return $list[$ret];
+	}
+	return "";
 }
