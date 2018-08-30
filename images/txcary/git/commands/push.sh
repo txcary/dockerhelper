@@ -13,3 +13,4 @@ pushAll dockerhelper
 pushAll dockerfiles
 pushAll traceability
 pushAll go/src/github.com/txcary/lixinger
+pushAll go/src/github.com/txcary/investment
