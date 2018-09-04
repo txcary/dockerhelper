@@ -8,6 +8,7 @@ pushAll(){
 }
 git config --global user.name "Tan Xiang"
 git config --global user.email tx-cary@163.com
+git config --global credential.helper 'cache --timeout=3600'
 
 pushAll dockerhelper
 pushAll dockerfiles
