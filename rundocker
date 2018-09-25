@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 use 5.010;
-my $image = inputFromList("Select Image", getImageList());
+my $imageKeyWord = shift;
+
+my $image = inputFromList("Select Image", getImageList($imageKeyWord));
 my ($imageBase) = split ":", $image;
 
 my $options = inputFromList("Select Option", getOptionList($imageBase));
@@ -77,11 +79,17 @@ sub getOptionList {
 }
 
 sub getImageList {
+	my $keyWord = shift;
 	my @images = `docker images`;
 	foreach my $image (@images) {
 		my ($repo, $tag) = split(' ', $image);
 		if($repo eq "REPOSITORY") {
 			next;
+		}
+		if(defined($keyWord)) {
+			if(!($repo =~ /$keyWord/)) {
+				next;
+			}
 		}
 		my $len = @list;
 		push @list, "$repo:$tag";
