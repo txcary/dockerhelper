@@ -16,3 +16,4 @@ pushAll traceability
 pushAll go/src/github.com/txcary/lixinger
 pushAll go/src/github.com/txcary/securejson
 pushAll go/src/github.com/txcary/investment
+pushAll go/src/github.com/txcary/goutils
