@@ -49,24 +49,30 @@ sub getFileList {
   return @list;
 }
 
+sub path {
+	my $pwd = `pwd`;
+	chomp($pwd);
+	return $pwd."/images";
+}
+
 sub getEntryList {
   my $imageBase = shift;
-  my @list = getFileList("/workspace/dockerhelper/entrypoints");
-  @list = (@list, getFileList("/workspace/dockerhelper/entrypoints/$imageBase"));
+  my @list = getFileList(path()."/default/entrypoints");
+  @list = (@list, getFileList(path()."/$imageBase/entrypoints"));
   return @list;
 }
 
 sub getCommandList {
   my $imageBase = shift;
-  my @list = getFileList("/workspace/dockerhelper/commands");
-  @list = (@list, getFileList("/workspace/dockerhelper/commands/$imageBase"));
+  my @list = getFileList(path()."/default/commands");
+  @list = (@list, getFileList(path()."/$imageBase/commands"));
   return @list;
 }
 
 sub getOptionList {
 	my $imageBase = shift;
- 	my @list = getFileList("/workspace/dockerhelper/options");
-  	@list = (@list, getFileList("/workspace/dockerhelper/options/$imageBase"));
+ 	my @list = getFileList(path()."/default/options");
+  	@list = (@list, getFileList(path()."/$imageBase/options"));
   	return @list;
 }
 
