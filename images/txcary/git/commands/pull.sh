@@ -8,4 +8,4 @@ git -C go/src/github.com/txcary/lixinger pull
 git -C go/src/github.com/txcary/securejson pull
 git -C go/src/github.com/txcary/investment pull
 git -C go/src/github.com/txcary/goutils pull
-
+git -C go/src/github.com/txcary/pplatform pull
