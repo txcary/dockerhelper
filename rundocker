@@ -4,6 +4,10 @@ my $imageKeyWord = shift;
 
 my $image = inputFromList("Select Image", getImageList($imageKeyWord));
 my ($imageBase) = split ":", $image;
+my @strList = split '/', $imageBase;
+if( $strList[0] eq "docker.io" ) {
+	$imageBase = join '/', @strList[1..((@strList)-1)];
+}
 
 my $options = inputFromList("Select Option", getOptionList($imageBase));
 if(-e "$options") {
